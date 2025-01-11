@@ -1,3 +1,5 @@
+import random
+
 def populate_2D_list(size):
     result = []
     for itr in range(size):
@@ -20,6 +22,15 @@ class Player:
             print(e)
             self.get_input()
 
+class Bot():
+    def __init__(self):
+        self.symbol = 'O'
+
+    def get_input(self):
+        self.input = random.randint(0, 8)
+        print(f'Bot placed {self.symbol} at {self.input} index.')
+    
+
 class Board:
     def __init__(self, size):
         self.size = size
@@ -31,18 +42,17 @@ class Board:
                 print("|", self.board[i][j], end=" ")
             print("|")
 
-    def assign_symbol(self, current_player, opposing_player):
+    def assign_symbol(self, current_player):
         symbol = current_player.symbol
-        op_symbol = opposing_player.symbol
         input = current_player.input
         row = input // self.size
         col = input % self.size
-        if(self.board[row][col] != symbol and self.board[row][col] != op_symbol):
+        if(self.board[row][col] != symbols[0] and self.board[row][col] != symbols[1]):
             self.board[row][col] = symbol
         else:
             print("Can't Be Doing that.")
             current_player.get_input()
-            self.assign_symbol(current_player, opposing_player)
+            self.assign_symbol(current_player)
 
     def check_board_winner(self, current_player):
         symbol = current_player.symbol
@@ -60,22 +70,37 @@ class Board:
 
 
 board = Board(3)
-current_player = player1 = Player('X')
-opposing_player = player2 = Player('O')
+symbols = ('X', 'O')
+current_player = player1 = Player(symbols[0])
+opposing_player = player2 = Player(symbols[1])
+computer = bot = Bot()
+choice_player = ''
+is_bot = False
+
+choice_player = str(input('Who you wanna play up against (Bot/Human): ').lower())
+if choice_player == 'bot' or choice_player == 'b':
+    is_bot = True
+    opposing_player = computer
 
 while(True):
     board()
     current_player.get_input()
-    board.assign_symbol(current_player, opposing_player)
+    board.assign_symbol(current_player)
+    
     if(board.check_board_winner(current_player)):
+        board()
+        print(f"Congratulations Player {current_player.symbol}. You won fair and square!")
         break
-    if(current_player == player1 and opposing_player == player2):
-        current_player = player2
+
+    if(current_player == player1 and (opposing_player == player2 or opposing_player == computer)):
+        if(is_bot):
+            current_player = computer
+        else:
+            current_player = player2 
         opposing_player = player1
     else:
-        current_player = player1
-        opposing_player = player2
-
-
-board()
-print(f"Congratulations Player {current_player.symbol}. You won fair and square!")
+        current_player = player1 
+        if(is_bot):
+            opposing_player = computer
+        else:
+            opposing_player = player2

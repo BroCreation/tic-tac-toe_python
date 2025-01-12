@@ -65,8 +65,7 @@ class Board:
                 return True
             elif(self.board[0][2] == symbol and self.board[1][1] == symbol and self.board[2][0] == symbol):
                 return True
-            else:
-                return False
+        return False
 
 
 board = Board(3)
@@ -75,9 +74,15 @@ current_player = player1 = Player(symbols[0])
 opposing_player = player2 = Player(symbols[1])
 computer = bot = Bot()
 choice_player = ''
+choices = ['bot', 'b', 'human', 'h']
 is_bot = False
 
 choice_player = str(input('Who you wanna play up against (Bot/Human): ').lower())
+
+while(choice_player not in choices):
+    print("Not Defined. (Choose 'b' for bot or 'h' for human)")
+    choice_player = str(input('Who you wanna play up against (Bot/Human): ').lower())
+
 if choice_player == 'bot' or choice_player == 'b':
     is_bot = True
     opposing_player = computer
@@ -86,7 +91,7 @@ while(True):
     board()
     current_player.get_input()
     board.assign_symbol(current_player)
-    
+
     if(board.check_board_winner(current_player)):
         board()
         print(f"Congratulations Player {current_player.symbol}. You won fair and square!")

@@ -65,7 +65,9 @@ class Board:
                 return True
             elif(self.board[0][2] == symbol and self.board[1][1] == symbol and self.board[2][0] == symbol):
                 return True
-        return False
+        # if for loops executes all the way then return False in else
+        else:
+            return False
 
 
 board = Board(3)
@@ -109,3 +111,6 @@ while(True):
             opposing_player = computer
         else:
             opposing_player = player2
+
+input('Press enter to exit(): ')
+            
